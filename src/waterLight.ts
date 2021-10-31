@@ -1,34 +1,59 @@
 var rpio = require("rpio");
-
+import {setup, turnOnPin, turnOffPin} from "./helpers/gpio"
+import {deviceList, device} from "./helpers/types"
 //Setup GPIO for each LED
-let LEDPins: number[] = [11, 12, 13, 15, 16, 18, 22, 3, 5, 24];
-
-function openOutputPin(pin:number):void {
-    rpio.open(pin, rpio.OUTPUT);
-    console.log(`Pin ${pin} is now open for output`);
+let devices:deviceList = {
+    "led":{
+        "1":{
+            type:"led",
+            pin:11
+        },
+        "2":{
+            type:"led",
+            pin:12
+        },
+        "3":{
+            type:"led",
+            pin:13
+        },
+        "4":{
+            type:"led",
+            pin:15
+        },
+        "5":{
+            type:"led",
+            pin:16
+        },
+        "6":{
+            type:"led",
+            pin:18
+        },
+        "7":{
+            type:"led",
+            pin:22
+        },
+        "8":{
+            type:"led",
+            pin:3
+        },
+        "9":{
+            type:"led",
+            pin:5
+        },
+        "10":{
+            type:"led",
+            pin:24
+        },
+    }
 }
 
-function openLEDPins(LEDPins:number[]):void {
-    LEDPins.forEach(openOutputPin);
-    console.log("All pins are open for output");
-    
-}
+setup(devices);
 
-function turnOffPin(pin:number) {
-    rpio.write(pin, rpio.HIGH);
+function turnOnAllLeds():void {
+    Object.values(devices.led).forEach(turnOnPin);
 }
-
-function turnOffLEDs(LEDPins:number[]):void {
-    LEDPins.forEach(turnOffPin)
+function turnOffAllLeds():void {
+    Object.values(devices.led).forEach(turnOffPin);
 }
-function turnOnPin(pin:number) {
-    rpio.write(pin, rpio.HIGH);
-}
-
-function turnOnLEDs(LEDPins:number[]):void {
-    LEDPins.forEach(turnOnPin)
-}
-openLEDPins(LEDPins);
-
-turnOnLEDs(LEDPins);
-
+turnOnAllLeds()
+setTimeout(turnOffAllLeds, 5000);
